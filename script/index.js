@@ -1,65 +1,81 @@
-let object1Size = {
-    width: 20,
-    height: 20
-  };
-  let position = {
-    x: 10,
-    y: 10
-  };
-
-  let object1 = document.getElementById("object1");
-  let object2=document.getElementById("object2");
-  let object3=document.getElementById("object3");
-
-  function updateYPosition(distance) {
-    position.y = position.y + distance;
-    if (position.y < 0) {
-      position.y = 699;
-    } else if (position.y > 699) {
-      position.y = 0;
-    }
-  }
-
-
-  function updateXPosition(distance) {
-    position.x = position.x + distance;
-    if (position.x < 0) {
-      position.x = 1399;
-    } else if (position.x > 1399) {
-      position.x = 0;
-    }
-  }
-
-  
-  function refreshPosition() {
-    let x = position.x - (object1Size.width/2);
-    let y = position.y - (object1Size.height/2);
-    let transform = "translate(" + x + " " + y + ")";
-  
-    object1.setAttribute("transform", transform);
-  }
-
-
-  window.addEventListener("keydown", function(event) {
-    if (event.defaultPrevented) {
-      return;
-    }
-    if (event.code === "ArrowDown"){
-        updateYPosition(10);
-    } else if (event.code === "ArrowUp"){
-        updateYPosition(-10);
-    } else if (event.code === "ArrowLeft"){
-        updateXPosition(-10);
-    } else if (event.code === "ArrowRight"){
-        updateXPosition(10);
-    }
-    refreshPosition();
-    event.preventDefault();
-  }, true);
-  
-
-  //change 3 images (tapu,babita,jethalal)
-  
-  //check collision and give an alert of game over
-  //random motion of jethalal
+const canvas=document.getElementById('canvas1');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
  
+
+
+window.addEventListener('resize',function(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+
+}
+);
+const particlesArray=[];
+let hue=0;
+const mouse={
+  x:null,
+  y:null,
+}
+
+canvas.addEventListener('mousemove',function(event){
+  mouse.x=event.x;
+  mouse.y=event.y;
+  for(i=0;i<5;i++)
+  {
+    particlesArray.push(new Particle());
+  }
+ 
+ 
+});
+
+
+class Particle{
+  constructor(){
+    this.x=mouse.x;
+    this.y=mouse.y;
+    this.size=Math.random()*15+1; //btw 1 and 6
+    this.speedX=Math.random()*3-1.5; //btw -1.5 and 1.5
+    this.speedY=Math.random()*3-1.5;
+    this.color='hsl(' + hue + ',100%,50%)';
+  }
+
+update()
+{
+  this.x+=this.speedX;
+  this.y+=this.speedY;
+ if(this.size>0.2)this.size-=0.1;
+}
+draw()
+{
+  ctx.fillStyle=this.color; //(degree of colour 0-red 120-green 240-blue,saturation value(0%-grey 100%full colour),lightness(0-black)(100%-white))
+  ctx.beginPath();
+  ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+  ctx.fill();
+  
+}
+}
+
+function handleParticles()
+{
+  for(let i=0;i<particlesArray.length;i++)
+  {
+    particlesArray[i].update();
+    particlesArray[i].draw();
+    if(particlesArray[i].size<=0.3){
+      particlesArray.splice(i,1);
+      i--;
+    }
+  }
+}
+animate();
+function animate(){
+ ctx.fillStyle='rgba(0,0,0,0.099)';
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+handleParticles();
+hue++;
+  requestAnimationFrame(animate);
+}
+
+
+
