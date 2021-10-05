@@ -50,7 +50,7 @@ draw()
 {
   ctx.fillStyle=this.color; //(degree of colour 0-red 120-green 240-blue,saturation value(0%-grey 100%full colour),lightness(0-black)(100%-white))
   ctx.beginPath();
-  ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+  ctx.arc(this.x,this.y,this.size,0,Math.PI);
   ctx.fill();
   
 }
