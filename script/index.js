@@ -13,6 +13,7 @@ window.addEventListener('resize',function(){
 );
 const particlesArray=[];
 let hue=0;
+let i;
 const mouse={
   x:null,
   y:null,
@@ -34,7 +35,7 @@ class Particle{
   constructor(){
     this.x=mouse.x;
     this.y=mouse.y;
-    this.size=Math.random()*15+1; //btw 1 and 6
+    this.size=Math.random()*15+1; //btw 1 and 16
     this.speedX=Math.random()*3-1.5; //btw -1.5 and 1.5
     this.speedY=Math.random()*3-1.5;
     this.color='hsl(' + hue + ',100%,50%)';
@@ -64,7 +65,7 @@ function handleParticles()
     particlesArray[i].draw();
     if(particlesArray[i].size<=0.3){
       particlesArray.splice(i,1);
-      i--;
+      
     }
   }
 }
